@@ -1,0 +1,36 @@
+const result=document.getElementById('result');
+const filter=document.getElementById('filter');
+const item=[];
+const dataFilter=(searchTerm) =>{
+    item.forEach((item) =>{
+        if(item.innerText.toLowerCase().includes(searchTerm.toLowerCase())){
+            item.classList.remove('hide');
+        }else{
+            item.classList.add('hide');
+        }
+    });
+};
+
+const getData= async () =>{
+    const res=await fetch('https://randomuser.me/api?results=50');
+    const{ results }=await res.json();
+    result.innerHTML="";
+    results.forEach((user) =>{
+        const li=document.createElement('li');
+        item.push(li);
+        li.innerHTML = `
+      <img
+            src="${user.picture.large}"
+            alt="${user.name.first}"
+          />
+      <div class="user-info">
+            <h4>${user.name.first} ${user.name.last}</h4>
+            <p>${user.location.city}, ${user.location.country}</p>
+      </div>
+      `;
+        result.appendChild(li)
+    });
+};
+getData();
+
+filter.addEventListener('input',(e) => dataFilter(e.target.value));
